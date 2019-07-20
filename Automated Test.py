@@ -5,6 +5,9 @@ import subprocess
 import socket
 import time
 import csv
+import datetime
+import webbrowser
+
 
 ipup = False
 
@@ -15,53 +18,45 @@ firewalls = os.path.join(scriptDir, 'firewalls.txt')
 firewallsFile = open(firewalls, "r")
 firelines = firewallsFile.readlines()
 
-hosts = os.path.join(scriptDir, 'hosts.txt')
-hostsFile = open(hosts, "r")
-hostlines = hostsFile.readlines()
+
+
+currentDT = datetime.datetime.now()
+
 #--------------------------------------------------
-# START IP CHECK - NON-FUNCTIONAL
+# START IP CHECK
 #--------------------------------------------------
 
 def firewalls():
 
-	for line in firelines:
-		line = line.strip( )
-		if plat == "Windows":
-			response = os.system("ping -n 1 " + line )
-
-		if response == 0:
-			print(line, 'is up!')
-		else:
-			print(line, 'is down!')
-
-
-
-firewallsFile.close()
-#--------------------------------------------------
-# STOP IP CHECK - NON-FUNCTIONAL
-#--------------------------------------------------
-
-#--------------------------------------------------
-# START DNS CHECK - NON-FUNCTIONAL
-#--------------------------------------------------
-
-def servers():
-
-    for line in hostlines:
+    for line in firelines:
         line = line.strip( )
         if plat == "Windows":
             response = os.system("ping -n 1 " + line )
 
         if response == 0:
-            print(line, 'is up!')
+                print("PRINTING")
+                with open('results.csv', 'a') as f:
+
+                
+                        csv_writer = csv.writer(f)
+                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'UP!'])
+                        
+                        
+ 
+                
+            
         else:
-            print(line, 'is down!')
+                print("PRINTING")
+                with open('results.csv', 'a') as f:
+
+                
+                        csv_writer = csv.writer(f)
+                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'DOWN!'])
 
 
-
-hostsFile.close()
+firewallsFile.close()
 #--------------------------------------------------
-# STOP DNS CHECK - NON-FUNCTIONAL
+# STOP IP CHECK
 #--------------------------------------------------
 
 
@@ -121,10 +116,10 @@ def ports():
 #--------------------------------------------------
 #END PORT CHECK
 #--------------------------------------------------
-
-
+def done():
+    webbrowser.open("Done.txt")
 
 if __name__ == "__main__":
         firewalls()
-        servers()
         ports()
+        done()
