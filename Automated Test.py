@@ -18,6 +18,9 @@ firelines = firewallsFile.readlines()
 hosts = os.path.join(scriptDir, 'hosts.txt')
 hostsFile = open(hosts, "r")
 hostlines = hostsFile.readlines()
+#--------------------------------------------------
+# START IP CHECK - NON-FUNCTIONAL
+#--------------------------------------------------
 
 def firewalls():
 
@@ -34,7 +37,13 @@ def firewalls():
 
 
 firewallsFile.close()
+#--------------------------------------------------
+# STOP IP CHECK - NON-FUNCTIONAL
+#--------------------------------------------------
 
+#--------------------------------------------------
+# START DNS CHECK - NON-FUNCTIONAL
+#--------------------------------------------------
 
 def servers():
 
@@ -51,6 +60,10 @@ def servers():
 
 
 hostsFile.close()
+#--------------------------------------------------
+# STOP DNS CHECK - NON-FUNCTIONAL
+#--------------------------------------------------
+
 
 #--------------------------------------------------
 # START PORT CHECK - NON-FUNCTIONAL
