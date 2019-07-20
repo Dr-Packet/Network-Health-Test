@@ -5,6 +5,7 @@ import subprocess
 import socket
 import time
 import csv
+import datetime
 
 ipup = False
 
@@ -15,37 +16,55 @@ firewalls = os.path.join(scriptDir, 'firewalls.txt')
 firewallsFile = open(firewalls, "r")
 firelines = firewallsFile.readlines()
 
-hosts = os.path.join(scriptDir, 'hosts.txt')
+hosts = os.path.join(scriptDir, 'dns.txt')
 hostsFile = open(hosts, "r")
 hostlines = hostsFile.readlines()
+
+
+currentDT = datetime.datetime.now()
+
 #--------------------------------------------------
-# START IP CHECK - NON-FUNCTIONAL
+# START IP CHECK
 #--------------------------------------------------
 
 def firewalls():
 
-	for line in firelines:
-		line = line.strip( )
-		if plat == "Windows":
-			response = os.system("ping -n 1 " + line )
+    for line in firelines:
+        line = line.strip( )
+        if plat == "Windows":
+            response = os.system("ping -n 1 " + line )
 
-		if response == 0:
-			print(line, 'is up!')
-		else:
-			print(line, 'is down!')
+        if response == 0:
+                print("PRINTING")
+                with open('results.csv', 'a') as f:
 
+                
+                        csv_writer = csv.writer(f)
+                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'UP!'])
+                        
+                        
+ 
+                
+            
+        else:
+                print("PRINTING")
+                with open('results.csv', 'a') as f:
+
+                
+                        csv_writer = csv.writer(f)
+                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'DOWN!'])
 
 
 firewallsFile.close()
 #--------------------------------------------------
-# STOP IP CHECK - NON-FUNCTIONAL
+# STOP IP CHECK
 #--------------------------------------------------
 
 #--------------------------------------------------
-# START DNS CHECK - NON-FUNCTIONAL
+# START DNS CHECK
 #--------------------------------------------------
 
-def servers():
+def dns():
 
     for line in hostlines:
         line = line.strip( )
@@ -53,20 +72,30 @@ def servers():
             response = os.system("ping -n 1 " + line )
 
         if response == 0:
-            print(line, 'is up!')
+                print("PRINTING")
+                with open('results.csv', 'a') as f:
+
+                
+                        csv_writer = csv.writer(f)
+                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'UP!'])
         else:
-            print(line, 'is down!')
+                print("PRINTING")
+                with open('results.csv', 'a') as f:
+
+                
+                        csv_writer = csv.writer(f)
+                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'DOWN!'])
 
 
 
 hostsFile.close()
 #--------------------------------------------------
-# STOP DNS CHECK - NON-FUNCTIONAL
+# STOP DNS CHECK
 #--------------------------------------------------
 
 
 #--------------------------------------------------
-# START PORT CHECK - NON-FUNCTIONAL
+# START PORT CHECK
 #--------------------------------------------------
 
 retry = 3
@@ -94,14 +123,23 @@ def ports():
 			for i in range(retry):
 
 					if isOpen(ip, port):
-							ipup = True
-							print (ip + " ", port + ' - UP')
+                            ipup = True
+                            with open('results.csv', 'a') as f:
+
+                
+                                csv_writer = csv.writer(f)
+                                csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip,port, 'UP!'])
+							
 							break
 					else:
 							if i < retry-1:
-								time.sleep(delay)
+                                time.sleep(delay)
 							else:
-								print (ip + " ", port + ' - DOWN') 
+                            with open('results.csv', 'a') as f:
+
+                
+                                csv_writer = csv.writer(f)
+                                csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip,port, 'DOWN!']) 
                             
                             
                         
@@ -126,5 +164,5 @@ def ports():
 
 if __name__ == "__main__":
         firewalls()
-        servers()
+        dns()
         ports()
