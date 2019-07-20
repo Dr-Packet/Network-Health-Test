@@ -6,6 +6,8 @@ import socket
 import time
 import csv
 import datetime
+import webbrowser
+
 
 ipup = False
 
@@ -16,9 +18,6 @@ firewalls = os.path.join(scriptDir, 'firewalls.txt')
 firewallsFile = open(firewalls, "r")
 firelines = firewallsFile.readlines()
 
-hosts = os.path.join(scriptDir, 'dns.txt')
-hostsFile = open(hosts, "r")
-hostlines = hostsFile.readlines()
 
 
 currentDT = datetime.datetime.now()
@@ -60,42 +59,9 @@ firewallsFile.close()
 # STOP IP CHECK
 #--------------------------------------------------
 
-#--------------------------------------------------
-# START DNS CHECK
-#--------------------------------------------------
-
-def dns():
-
-    for line in hostlines:
-        line = line.strip( )
-        if plat == "Windows":
-            response = os.system("ping -n 1 " + line )
-
-        if response == 0:
-                print("PRINTING")
-                with open('results.csv', 'a') as f:
-
-                
-                        csv_writer = csv.writer(f)
-                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'UP!'])
-        else:
-                print("PRINTING")
-                with open('results.csv', 'a') as f:
-
-                
-                        csv_writer = csv.writer(f)
-                        csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), line, 'DOWN!'])
-
-
-
-hostsFile.close()
-#--------------------------------------------------
-# STOP DNS CHECK
-#--------------------------------------------------
-
 
 #--------------------------------------------------
-# START PORT CHECK
+# START PORT CHECK - NON-FUNCTIONAL
 #--------------------------------------------------
 
 retry = 3
@@ -123,23 +89,29 @@ def ports():
 			for i in range(retry):
 
 					if isOpen(ip, port):
-                            ipup = True
-                            with open('results.csv', 'a') as f:
+							ipup = True
+							print (ip + " ", port + ' - UP')
+
+							print("PRINTING")
+							with open('results.csv', 'a') as f:
 
                 
-                                csv_writer = csv.writer(f)
-                                csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip,port, 'UP!'])
-							
+									csv_writer = csv.writer(f)
+									csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip, port, 'UP!'])
+
+
 							break
 					else:
 							if i < retry-1:
-                                time.sleep(delay)
+								time.sleep(delay)
 							else:
-                            with open('results.csv', 'a') as f:
+								print (ip + " ", port + ' - DOWN')                            
+								print("PRINTING")
+								with open('results.csv', 'a') as f:
 
                 
-                                csv_writer = csv.writer(f)
-                                csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip,port, 'DOWN!']) 
+										csv_writer = csv.writer(f)
+										csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip, port, 'DOWN!'])                                
                             
                             
                         
@@ -159,10 +131,10 @@ def ports():
 #--------------------------------------------------
 #END PORT CHECK
 #--------------------------------------------------
-
-
+def done():
+    webbrowser.open("Done.txt")
 
 if __name__ == "__main__":
-        firewalls()
-        dns()
+
         ports()
+        done()
