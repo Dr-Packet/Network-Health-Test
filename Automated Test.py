@@ -60,6 +60,8 @@ firewallsFile.close()
 #--------------------------------------------------
 
 
+
+
 #--------------------------------------------------
 # START PORT CHECK - NON-FUNCTIONAL
 #--------------------------------------------------
@@ -91,12 +93,27 @@ def ports():
 					if isOpen(ip, port):
 							ipup = True
 							print (ip + " ", port + ' - UP')
+
+							print("PRINTING")
+							with open('results.csv', 'a') as f:
+
+                
+									csv_writer = csv.writer(f)
+									csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip, port, 'UP!'])
+
+
 							break
 					else:
 							if i < retry-1:
 								time.sleep(delay)
 							else:
-								print (ip + " ", port + ' - DOWN') 
+								print (ip + " ", port + ' - DOWN')                            
+								print("PRINTING")
+								with open('results.csv', 'a') as f:
+
+                
+										csv_writer = csv.writer(f)
+										csv_writer.writerow([currentDT.strftime("%Y-%m-%d - %H:%M:%S"), ip, port, 'DOWN!'])                                
                             
                             
                         
