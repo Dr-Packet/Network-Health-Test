@@ -34,7 +34,6 @@ def firewalls():
             response = os.system("ping -n 1 " + line )
 
         if response == 0:
-                print("PRINTING")
                 with open('results.csv', 'a') as f:
 
                 
@@ -46,7 +45,6 @@ def firewalls():
                 
             
         else:
-                print("PRINTING")
                 with open('results.csv', 'a') as f:
 
                 
@@ -94,7 +92,6 @@ def ports():
 							ipup = True
 							print (ip + " ", port + ' - UP')
 
-							print("PRINTING")
 							with open('results.csv', 'a') as f:
 
                 
@@ -108,7 +105,6 @@ def ports():
 								time.sleep(delay)
 							else:
 								print (ip + " ", port + ' - DOWN')                            
-								print("PRINTING")
 								with open('results.csv', 'a') as f:
 
                 
