@@ -19,7 +19,6 @@ firewallsFile = open(firewalls, "r")
 firelines = firewallsFile.readlines()
 
 
-
 currentDT = datetime.datetime.now()
 
 #--------------------------------------------------
